@@ -9,6 +9,7 @@ public class AnimImport : AssetPostprocessor
 {
     void OnPostprocessModel(GameObject obj)
     {
+        return;
         try
         {
             //这里延迟一帧等资源刷新

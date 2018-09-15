@@ -9,6 +9,7 @@ public class FileMove : UnityEditor.AssetModificationProcessor
 
     public static AssetMoveResult OnWillMoveAsset(string oldPath,string newPath)
     {
+        return AssetMoveResult.FailedMove;
         AssetMoveResult result = AssetMoveResult.DidNotMove;
         if(oldPath==prefabPath)
         {
