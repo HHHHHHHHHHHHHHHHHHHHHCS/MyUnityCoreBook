@@ -8,9 +8,9 @@ public class MyTriangle : MonoBehaviour
 {
     public GameObject cubePrefab;
     public Transform targetTS;
-    public Vector3 aPoint=new Vector3(-5,0,5)
-        , bPoint=new Vector3(3,0,3) 
-        , cPoint=new Vector3(4,0,-4);
+    public Vector3 aPoint = new Vector3(-5, 0, 5)
+        , bPoint = new Vector3(3, 0, 3)
+        , cPoint = new Vector3(4, 0, -4);
 
     private List<Transform> cubeList;
     private double len_ab, len_bc, len_ac, s_area;
@@ -22,25 +22,29 @@ public class MyTriangle : MonoBehaviour
         SpawnCubes();
         if (CheckIsTriangle())
         {
-
+            print(s_area);
         }
-
     }
 
     private void Update()
     {
-        CheckInArea();
+        if (s_area > 0)
+        {
+
+            CheckInArea();
+        }
+
     }
 
     private bool CheckIsTriangle()
     {
-         Vector3 vec_ab = aPoint - bPoint,
-         vec_ac = aPoint - cPoint,
-         vec_bc = bPoint - cPoint ;
+        Vector3 vec_ab = aPoint - bPoint,
+        vec_ac = aPoint - cPoint,
+        vec_bc = bPoint - cPoint;
 
-        var ang1=Vector3.Dot(vec_ab, vec_ac);
+        var ang1 = Vector3.Dot(vec_ab, vec_ac);
 
-        if(ang1==0)
+        if (ang1 == 0)
         {
             return false;
         }
@@ -48,7 +52,7 @@ public class MyTriangle : MonoBehaviour
         len_ab = vec_ab.magnitude;
         len_bc = vec_bc.magnitude;
         len_ac = vec_ac.magnitude;
-        double s_area = CalArea(len_ab, len_bc, len_ac);
+        s_area = CalArea(len_ab, len_bc, len_ac)+1e-5;//误差计算
         return true;
     }
 
@@ -80,42 +84,43 @@ public class MyTriangle : MonoBehaviour
 
     private void CheckInArea()
     {
-
+        Vector3 p;
+        double s, l_ap, l_bp, l_cp;
         Transform tempTS;
         Color endColor;
         for (int i = 0; i < cubeList.Count; i++)
         {
             tempTS = cubeList[i];
-            offset = tempTS.position - nowPos;
-            if (Vector3.SqrMagnitude(offset) <= sqrRadius)
+
+            p = tempTS.position;
+            l_ap = (p - aPoint).magnitude;
+            l_bp = (p - bPoint).magnitude;
+            l_cp = (p - cPoint).magnitude;
+            s = CalArea(len_ab, l_ap, l_bp) + CalArea(len_bc, l_cp, l_bp)
+                + CalArea(len_ac, l_ap, l_cp);
+ 
+            if (s <= s_area)
             {
-                offset.Normalize();
-                float cos = Vector3.Dot(targetTS.forward, offset);
-                if (cos - cosAngle >= 0)
-                {
-                    endColor = Color.yellow;
-                }
-                else
-                {
-                    endColor = Color.white;
-                }
+
+                endColor = Color.yellow;
             }
             else
             {
                 endColor = Color.white;
             }
+
             tempTS.GetComponent<MeshRenderer>().material.SetColor("_Color", endColor);
         }
     }
 
-    [DrawGizmo(GizmoType.Selected|GizmoType.NonSelected)]
+    [DrawGizmo(GizmoType.Selected | GizmoType.NonSelected)]
     private void OnDrawGizmos()
     {
         if (!targetTS)
             return;
-        //Handles.color = new Color(1, 1, 1, 0.2f);
-        //var newStart = Quaternion.Euler(new Vector3(0, -angle/2 , 0)) * targetTS.forward;
-        //Handles.DrawSolidArc(targetTS.position, targetTS.up, newStart, angle, radius);
+        Gizmos.DrawLine(aPoint, bPoint);
+        Gizmos.DrawLine(aPoint, cPoint);
+        Gizmos.DrawLine(cPoint, bPoint);
     }
 
 }
