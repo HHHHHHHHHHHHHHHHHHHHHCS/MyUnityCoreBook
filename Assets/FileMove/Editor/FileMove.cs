@@ -7,9 +7,8 @@ public class FileMove : UnityEditor.AssetModificationProcessor
 {
     private static string prefabPath = "Assets/FileMove/TestPrefab.prefab";
 
-    public static AssetMoveResult OnWillMoveAsset(string oldPath,string newPath)
+    public static AssetMoveResult _OnWillMoveAsset(string oldPath,string newPath)
     {
-        return AssetMoveResult.DidNotMove;
         AssetMoveResult result = AssetMoveResult.DidNotMove;
         if(oldPath==prefabPath)
         {
