@@ -23,6 +23,11 @@ public class SearchNode
     public float h;
     public SearchNode parent;
 
+    public SearchNode(int x, int y) : this(new Vector2(x, y))
+    {
+
+    }
+
     public SearchNode(Vector2 pos)
     {
         this.pos = pos;
@@ -43,10 +48,63 @@ public class SearchNode
     {
         return NodeMethod.IsValidPos(pos);
     }
+
+    public override string ToString()
+    {
+        return string.Format(" [{0},{1}] ", (int)pos.x, (int)pos.y);
+    }
 }
 
 public static class NodeMethod
 {
+    public static SearchNode GetMinFNode(List<SearchNode> openset)
+    {
+        int index = 0;
+        float min = MapData.width + MapData.height;
+
+        for (int i = 0; i < openset.Count; i++)
+        {
+            min = openset[i].f;
+            index = i;
+        }
+        return openset[index];
+    }
+
+    public static SearchNode GetNode(List<SearchNode> set, SearchNode node)
+    {
+        for (int i = 0; i < set.Count; i++)
+        {
+            if (IsEqual(node, set[i]))
+            {
+                return set[i];
+            }
+        }
+        return null;
+    }
+
+    public static bool ContainNode(List<SearchNode> set, SearchNode node)
+    {
+        for (int i = 0; i < set.Count; i++)
+        {
+            if (set[i].IsEqual(node))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void RemoveNode(List<SearchNode> set, SearchNode node)
+    {
+        for (int i = 0; i < set.Count; i++)
+        {
+            if (set[i].IsEqual(node))
+            {
+                set.RemoveAt(i);
+                return;
+            }
+        }
+    }
 
     public static bool IsEqual(SearchNode node1, SearchNode node2)
     {
@@ -64,9 +122,9 @@ public static class NodeMethod
 
         List<SearchNode> nodeList = new List<SearchNode>()
         {
-            Capacity=4
+            Capacity = 4
         };
-        if(IsValidPos(up))
+        if (IsValidPos(up))
         {
             nodeList.Add(new SearchNode(up));
         }
@@ -88,11 +146,11 @@ public static class NodeMethod
 
     public static bool IsValidPos(Vector2 pos)
     {
-        if(pos.x<0||pos.x>MapData.width-1
+        if (pos.x < 0 || pos.x > MapData.width - 1
             || pos.y < 0 || pos.y > MapData.height - 1)
         {
             return false;
         }
-        return MapData.pathMap[(int)pos.x, (int)pos.y] == 0 ? true : false;
+        return MapData.pathMap[(int)pos.y, (int)pos.x] == 0 ? true : false;
     }
 }
