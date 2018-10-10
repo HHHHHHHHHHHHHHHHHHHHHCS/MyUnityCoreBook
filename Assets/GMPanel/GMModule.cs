@@ -33,12 +33,17 @@ public class GMModule
         var methods = type.GetMethods();
         foreach(var item in methods)
         {
-            var attr = item.GetCustomAttributes(typeof(GMCommondAttribute),false);
-            if(attr!=null && attr.Length>0)
+            var attrs = item.GetCustomAttributes(typeof(GMCommondAttribute),false);
+            if(attrs != null && attrs.Length>0)
             {
-                GMCommondAttribute gmc = attr[0] as GMCommondAttribute;
-                this.methods.Add(gmc.cmd, item);
-
+                foreach(var attr in attrs)
+                {
+                    if(attr is GMCommondAttribute)
+                    {
+                        GMCommondAttribute gmc = attr as GMCommondAttribute;
+                        this.methods.Add(gmc.cmd, item);
+                    }
+                }
             }
         }
     }
@@ -56,8 +61,15 @@ public class GMModule
             }
 
             var method = methods[tmpStr[0]];
-            var info = method.GetCustomAttributes(typeof(GMCommondAttribute),
-                false)[0] as GMCommondAttribute;
+            var infos = method.GetCustomAttributes(typeof(GMCommondAttribute), false);
+            GMCommondAttribute info=null;
+            foreach(var item in infos)
+            {
+                if(item is GMCommondAttribute)
+                {
+                    info = item as GMCommondAttribute;
+                }
+            }
 
             if (param.Count != info.paramNum)
             {
