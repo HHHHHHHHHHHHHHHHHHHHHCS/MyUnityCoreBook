@@ -26,6 +26,24 @@ public class RangeShower : MonoBehaviour
     public Material rectIndicator;
     #endregion
 
+    #region protected Attr
+    protected Mesh mesh;
+    protected MeshFilter meshFilter;
+    protected MeshRenderer meshRenderer;
+
+    protected Vector3[] vertices;
+    protected int[] triangles;
+    protected Vector2[] uvs;
+
+    protected int lastCount;
+    #endregion
+
+    protected void Awake()
+    {
+        meshFilter = GetComponent<MeshFilter>();
+        meshRenderer = GetComponent<MeshRenderer>();
+    }
+
     private void LateUpdate()
     {
         enabled = false;
