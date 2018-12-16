@@ -46,5 +46,14 @@ public class RangeShower : MonoBehaviour
 
     public virtual void UpdateMesh()
     {
+        if (!mesh)
+        {
+            mesh = new Mesh();
+            mesh.name = "New Mesh";
+        }
+        else
+        {
+            mesh.Clear();
+        }
     }
 }

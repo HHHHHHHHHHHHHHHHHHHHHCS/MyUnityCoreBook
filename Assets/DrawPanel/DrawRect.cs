@@ -11,15 +11,7 @@ public class DrawRect : RangeShower
 
     public override void UpdateMesh()
     {
-        if (!mesh)
-        {
-            mesh = new Mesh();
-            mesh.name = "New Mesh";
-        }
-        else
-        {
-            mesh.Clear();
-        }
+        base.UpdateMesh();
 
         Vector2 uvCenter = new Vector2(0.5f, 0.5f);
         vertices = new Vector3[4];
