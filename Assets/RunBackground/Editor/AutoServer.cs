@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEditor;
 
 /// <summary>
-/// Unity点击 Play的时候脚本会rebuild一次
+/// Unity点击 Play的时候脚本会清除内存中的缓存 重新执行start
+/// 然后退出的时候 不会执行start
 /// 所以需要闭环服务
 /// </summary>
 [InitializeOnLoad]
@@ -52,7 +53,7 @@ public class AutoServer
         if (!EditorApplication.isPlayingOrWillChangePlaymode)
         {
             EditorApplication.update -= RunningUpdate;
-            EditorApplication.update += ScriptRunning;
+            EditorApplication.update += ScriptLoaod;
         }
     }
 
