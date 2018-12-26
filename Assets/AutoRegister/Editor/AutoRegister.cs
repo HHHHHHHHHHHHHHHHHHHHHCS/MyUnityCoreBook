@@ -15,6 +15,7 @@ public class AutoRegister
 
     static AutoRegister()
     {
+        return;
         if (!EditorApplication.isPlayingOrWillChangePlaymode)
         {
             EditorApplication.update += ScriptLoaod;
